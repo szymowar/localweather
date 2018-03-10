@@ -1,25 +1,30 @@
-function getLocal() {
-    var output = document.getElementById('place')
-
-    if (!navigator.geolocation) {
-        output.innerHTML ="Geolocation is not supported by your browser";
-        return;
-    }
-
-    function localCoordinates(position) {
-        var latitude = position.coords.latitude;
-        var longitude = position.coords.longitude;
-        var coords = {};
-        coords["lat"] = latitude;
-        coords["long"] = longitude;
-        output.innerHTML = coords.lat +" " + coords.long;
-        return coords;
-    }
-
-    function error() {
-        output.innerHTML = "Unable to find your location";
-    }
-    console.log(navigator.geolocation.getCurrentPosition(localCoordinates,error));
-
+function localCoordinates(position) {
+    var output = document.getElementById("place");
+    var latitude = position.coords.latitude;
+    var longitude = position.coords.longitude;
+    var timestamp = position.timestamp;
+    output.innerHTML = latitude+ " " + longitude;
+    var coord = {};
+    coord["lat"] = latitude;
+    coord["long"] = longitude;
+    coord["timestamp"] = timestamp;
+    getWeather(coord);
 }
-getLocal()
+function getLocation() {
+    if(navigator.geolocation){
+    navigator.geolocation.getCurrentPosition(
+            localCoordinates);
+    }else {
+        console.log("error");
+    }
+}
+function getWeather(coord) {
+    var local = "api/current?lat="+ coord.lat +"&lon=" + coord.long;
+    var weatherAPIurl = "https://fcc-weather-api.glitch.me/";
+    $.ajax({url:weatherAPIurl + local,
+                success: function(data) {
+                    console.log(data);
+            }
+        });
+}
+getLocation()
