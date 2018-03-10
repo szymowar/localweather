@@ -1,0 +1,14 @@
+.inblock-item {
+    display: block;
+    border: 1px solid;
+    
+}
+.threeitems {
+    display: inline-block;
+    border: 1px solid;
+
+}
+#mainblock {
+    border: 1px solid;
+    margin: 5% 30% auto 30%;
+}
