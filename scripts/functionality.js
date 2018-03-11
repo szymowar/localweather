@@ -1,12 +1,8 @@
 function moveDataToDOM(data){
-    var tempUnit = "°C";
-    var temp = Math.round(data.main.temp);
     $('#icon').attr("src",data.weather[0].icon);
-    $('#temp').text(temp + tempUnit)
-    $('#temp-tog').click(function() {
-                $('#temp').changeTemp();});
+    $('#temp').text(Math.round(data.main.temp) + "°C");
     $('#place').text(data.name + ", " + data.sys.country);
-    $('#wind').text(data.wind.speed);
+    $('#wind').text(data.wind.speed, "knots");
 }
 
 function cloudiness(data){
@@ -56,13 +52,17 @@ function localCoordinates(position) {
     getWeather(coord);
 }
 
-function changeTemp(tempUnit, temp) {
+function changeTemp(temp) {
+    var reg = /°C|°F/g;
+    var reg2 = /-?[0-9]/g;
+    var tempUnit = temp.replace(reg2, '');
+    var temp = temp.replace(reg, '');
     if(tempUnit == "°C") {
-        temp = (temp * 9)/5 + 32;
+        temp = Math.round((temp * 1.8) + 32);
         tempUnit = "°F"
         return temp + tempUnit;
-    } else {
-        temp = ((temp - 32) * 5)/9;
+    } else if (tempUnit == "°F"){
+        temp = Math.round(((temp - 32) / 1.8));
         tempUnit = "°C";
         return temp + tempUnit
     }
@@ -71,7 +71,13 @@ function changeTemp(tempUnit, temp) {
 $(document).ready(function updateLocation() {
     if(navigator.geolocation){
     navigator.geolocation.getCurrentPosition(localCoordinates);
+
     }else {
         console.log("error");
     }
+    $('#temp-tog').click(function() {
+                var temp = $('#temp').html();
+                changeTemp(temp);
+                $('#temp').html(changeTemp(temp));
+            });
 })
