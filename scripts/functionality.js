@@ -1,43 +1,60 @@
-function moveDataToDOM(data){
+function moveData(data){
     $('#icon').attr("src",data.weather[0].icon);
     $('#temp').text(Math.round(data.main.temp) + "°C");
     $('#place').text(data.name + ", " + data.sys.country);
-    $('#wind').text(data.wind.speed, "knots");
 }
 
 function cloudiness(data){
     var description = "";
-        switch(true){
-    case (data >= 90):
+    if (data >= 90){
         description = "sky is fully covered";
-        break;
-    case (data >= 75):
+    } else if(data >= 75 && data < 90){
         description = "sky is almost covered";
-        break;
-    case (data >= 50):
+    } else if(data >=50 && data < 75){
         description = "sky is partially covered";
-        break;
-    case (data >= 25):
+    } else if(data >= 25 && data < 50){
         description = "sky is slightly covered";
-        break;
-    case (data >= 10):
+    } else if(data >= 10 && data < 25){
         description = "sky is almost clear";
-        break;
-    case (data < 10):
+    } else if(data < 10){
         description = "sky is clear";
-        break;
-    default:
+    } else {
         description = "no data available";
     }
     $('#cloud').text(description);
+}
+
+function windDirection(data, windspeed){
+    var windDir = "";
+    if(data >= 337.5 && data < 360 || data >= 0 && data < 22.5){
+        windDir = "N";
+    }else if(data >= 22.5 && data < 67.5){
+        windDir = "NE";
+    }else if(data >= 67.5 && data < 112.5){
+        windDir = "E";
+    }else if(data >= 112.5 && data < 157){
+        windDir = "SE";
+    }else if(data >= 157 && data < 202.5){
+        windDir = "S";
+    }else if(data >= 202.5 && data < 247.5){
+        windDir = "SW";
+    }else if(data >= 247.5 && data < 292.5){
+        windDir = "W";
+    }else if(data >= 292.5 && data < 337.5){
+        windDir = "NW";
+    }else{
+        windDir = "no data available"
+    }
+    $('#wind').text(windDir +" "+ windspeed + " " + "knots");
 }
 
 function getWeather(coord) {
     var local = "api/current?lat="+ coord.lat +"&lon=" + coord.long;
     $.ajax({url:"https://fcc-weather-api.glitch.me/" + local,
                 success: function(data) {
-                    moveDataToDOM(data, changeTemp);
+                    moveData(data);
                     cloudiness(data.clouds.all);
+                    windDirection(data.wind.deg,data.wind.speed);
             }
         });
 }
@@ -60,24 +77,21 @@ function changeTemp(temp) {
     if(tempUnit == "°C") {
         temp = Math.round((temp * 1.8) + 32);
         tempUnit = "°F"
-        return temp + tempUnit;
     } else if (tempUnit == "°F"){
         temp = Math.round(((temp - 32) / 1.8));
         tempUnit = "°C";
-        return temp + tempUnit
     }
+    return temp + tempUnit
 }
 
 $(document).ready(function updateLocation() {
     if(navigator.geolocation){
     navigator.geolocation.getCurrentPosition(localCoordinates);
-
     }else {
         console.log("error");
     }
     $('#temp-tog').click(function() {
                 var temp = $('#temp').html();
-                changeTemp(temp);
                 $('#temp').html(changeTemp(temp));
-            });
-})
+                });
+            })
