@@ -1,6 +1,8 @@
 function moveData(data){
+    var tempUnit = ""
     $('#icon').attr("src",data.weather[0].icon);
-    $('#temp').text(Math.round(data.main.temp) + "°C");
+    $('#temp').text(Math.round(data.main.temp));
+    $('#temp-tog').text("°C");
     $('#place').text(data.name + ", " + data.sys.country);
 }
 
@@ -55,9 +57,9 @@ function getWeather(coord) {
                     moveData(data);
                     cloudiness(data.clouds.all);
                     windDirection(data.wind.deg,data.wind.speed);
+                    }
+                });
             }
-        });
-}
 
 function localCoordinates(position) {
     var output = document.getElementById("place");
@@ -69,11 +71,7 @@ function localCoordinates(position) {
     getWeather(coord);
 }
 
-function changeTemp(temp) {
-    var reg = /°C|°F/g;
-    var reg2 = /-?[0-9]/g;
-    var tempUnit = temp.replace(reg2, '');
-    var temp = temp.replace(reg, '');
+function changeTemp(temp, tempUnit) {
     if(tempUnit == "°C") {
         temp = Math.round((temp * 1.8) + 32);
         tempUnit = "°F"
@@ -81,7 +79,16 @@ function changeTemp(temp) {
         temp = Math.round(((temp - 32) / 1.8));
         tempUnit = "°C";
     }
-    return temp + tempUnit
+    return temp;
+}
+
+function changeTempUnit(tempUnit){
+    if(tempUnit == "°C"){
+        tempUnit = "°F";
+    } else {
+        tempUnit = "°C";
+    }
+    return tempUnit;
 }
 
 $(document).ready(function updateLocation() {
@@ -92,6 +99,8 @@ $(document).ready(function updateLocation() {
     }
     $('#temp-tog').click(function() {
                 var temp = $('#temp').html();
-                $('#temp').html(changeTemp(temp));
+                var tempUnit = $('#temp-tog').html();
+                $('#temp-tog').html(changeTempUnit(tempUnit));
+                $('#temp').html(changeTemp(temp, tempUnit));
                 });
             })
