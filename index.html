@@ -3,8 +3,8 @@
 <head>
     <meta charset="utf-8">
     <link rel="stylesheet" href="styles/style.css">
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-    <script type="text/javascript" src="scripts/functionality.js"></script>
+    <script type="text/javascript" src="scripts/jquery-3.3.1.min.js"></script>
+    <script  type="text/javascript" src="scripts/functionality.js"></script>
 </head>
 <body>
     <!-- main block-->
@@ -14,16 +14,23 @@
             <h1>Local weather</h1>
         </div>
         <div class="inblock-item">
-            <p>Temperature and weather icon</p>
+            <div  class="threeitems">
+                <img id="icon" src="">
+            </div>
+            <div id="temp" class="threeitems">
+                <p>temperature</p>
+            </div>
+            <div id="temp-tog" class="threeitems"><p>temperature toggle<p>
+            </div>
            </div>
            <!-- 3 inline block items-->
            <div id="place" class="threeitems">
                <p>Place</p>
            </div>
-           <div class="threeitems">
+           <div id="cloud" class="threeitems">
                <p>Cloudiness</p>
            </div>
-           <div class="threeitems"><p>Wind speed<p>
+           <div id="wind" class="threeitems"><p>Wind speed<p>
            </div>
            </div>
     </div>
