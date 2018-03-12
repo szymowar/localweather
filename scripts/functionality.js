@@ -56,7 +56,9 @@ function getWeather(coord) {
                     moveData(data);
                     cloudiness(data.clouds.all);
                     windDirection(data.wind.deg,data.wind.speed);
-                    }
+                }, error:function(){
+                    alert("there was an API problem");
+                }
                 });
             }
 
@@ -92,7 +94,7 @@ $(document).ready(function updateLocation() {
     if(navigator.geolocation){
     navigator.geolocation.getCurrentPosition(localCoordinates);
     }else {
-        console.log("error");
+        alert("Geolocation is not available");
     }
     $('#temp-tog').click(function() {
                 var temp = $('#temp').html();
