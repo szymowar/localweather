@@ -1,5 +1,4 @@
 function moveData(data){
-    var tempUnit = ""
     $('#icon').attr("src",data.weather[0].icon);
     $('#temp').text(Math.round(data.main.temp));
     $('#temp-tog').text("°C");
@@ -21,7 +20,7 @@ function cloudiness(data){
     } else if(data < 10){
         description = "sky is clear";
     } else {
-        description = "no data available";
+        description = "n/a";
     }
     $('#cloud').text(description);
 }
@@ -45,7 +44,7 @@ function windDirection(data, windspeed){
     }else if(data >= 292.5 && data < 337.5){
         windDir = "NW";
     }else{
-        windDir = "no data available"
+        windDir = "n/a"
     }
     $('#wind').text(windDir +" "+ windspeed + " " + "knots");
 }
@@ -84,11 +83,9 @@ function changeTemp(temp, tempUnit) {
 
 function changeTempUnit(tempUnit){
     if(tempUnit == "°C"){
-        tempUnit = "°F";
-    } else {
-        tempUnit = "°C";
+        return "°F";
     }
-    return tempUnit;
+    return "°C";
 }
 
 $(document).ready(function updateLocation() {
